@@ -93,10 +93,19 @@ Generator.prototype.askFor = function askFor() {
   var cb   = this.async()
     , self = this
 
+  // Validate required
+  var requiredValidate = function(value) {
+    if (value == '') {
+      return 'This field is required.';
+    }
+    return true;
+  };
+
   var prompts = [{
           name: 'themeName',
           message: 'Name of the theme you want to use',
-          default: 'mytheme'
+          default: 'mytheme',
+          validate: requiredValidate
       },
       {
           name: 'themeBoilerplate',
@@ -104,17 +113,13 @@ Generator.prototype.askFor = function askFor() {
           default: self.defaultTheme,
           filter: function (input) {
             return input.replace(/\ /g, '').toLowerCase()
-          }
+          },
+          validate: requiredValidate          
       },
       {
           name: 'wordpressVersion',
           message: 'Which version of Wordpress do you want?',
           default: self.latestVersion
-      },
-      {
-          type: 'confirm',
-          name: 'includeRequireJS',
-          message: 'Would you like to include RequireJS (for AMD support)?'
       },
       {
           name: 'authorName',
@@ -125,7 +130,89 @@ Generator.prototype.askFor = function askFor() {
           name: 'authorURI',
           message: 'Author URI',
           default: self.defaultAuthorURI
-      }]
+      }, 
+    { 
+      type: 'list',
+      name: 'preprocessor',
+      message: 'Which CSS Preprocessor would you like?',
+      choices: [
+        {
+          name: 'LESS',
+          value: 'includeLESS'
+        },
+        {
+          name: 'SASS',
+          value: 'includeSASS'
+        }
+      ]
+    }, 
+    { 
+      type: 'list',
+      name: 'framework',
+      message: 'Which front-end framework would you like?',
+      choices: [
+        {
+          name: 'Bootstrap',
+          value: 'includeBootstrap'
+        },
+        {
+          name: 'Foundation',
+          value: 'includeFoundation'
+        },
+        {
+          name: 'None',
+          value: 'includeNone'
+        }
+      ]
+    },
+    { 
+      type: 'checkbox',
+      name: 'features',
+      message: 'jQuery is included by default so what more would you like?',
+      choices: [
+        {
+          name: 'RequireJS',
+          value: 'includeRequireJS',
+          checked: true
+        }, 
+        {
+          name: 'Modernizr',
+          value: 'includeModernizr',
+          checked: true
+        }, 
+        {
+          name: 'Underscore',
+          value: 'includeUnderscore',
+          checked: true
+        }
+      ]
+    }, 
+    { 
+      type: 'list',
+      name: 'versionControl',
+      message: 'Which version control service are you using?',
+      choices: [
+        {
+          name: 'BitBucket',
+          value: 'includeBitBucket'
+        },
+        {
+          name: 'Github',
+          value: 'includeGitHub'
+        }
+      ]
+    },
+    {
+      name: 'accountName',
+      message: 'What is the name of the account?',
+      default: 'signals',
+      validate: requiredValidate
+    },
+    {
+      name: 'repoName',
+      message: 'What is the name of the repo?',
+      validate: requiredValidate
+    }]
 
   this.prompt(prompts, function(props) {
     // set the property to parse the gruntfile
@@ -151,6 +238,39 @@ Generator.prototype.askFor = function askFor() {
       }
     }
 
+//Preprocessor Questions
+    var framework = props.framework;
+    function whichframework(frameworkOptions) { return framework.indexOf(frameworkOptions) !== -1; }
+
+    self.includeBootstrap = whichframework('Bootstrap');
+    self.includeFoundation = whichframework('Foundation');
+    self.includeNone = whichframework('None');
+
+    //Framework Questions
+    var preprocessor = props.preprocessor;
+    function whichPreprocessor(preprocessorOptions) { return preprocessor.indexOf(preprocessorOptions) !== -1; }
+
+    self.includeLESS = whichPreprocessor('LESS');
+    self.includeSASS = whichPreprocessor('SASS');
+
+    //Feature Questions
+    var features = props.features;
+    function hasFeature(feat) { return features.indexOf(feat) !== -1; }
+
+    self.includeRequireJS = hasFeature('includeRequireJS');
+    self.includeModernizr = hasFeature('includeModernizr');
+    self.includeUnderscore = hasFeature('includeUnderscore');
+
+    //Feature Questions
+    var versionControl = props.versionControl;
+    function hasVersionControl(versionOption) { return versionControl.indexOf(versionOption) !== -1; }
+
+    self.includeBitBucket = hasVersionControl('includeBitBucket');
+    self.includeGitHub = hasVersionControl('includeGitHub');
+
+    self.accountName = props.accountName;
+    self.repoName = props.repoName;
+    
     // create the config file it does not exist
     if (!self.configExists) {
       var values = {
@@ -159,8 +279,7 @@ Generator.prototype.askFor = function askFor() {
       , themeUrl:   self.themeOriginalURL
       }
       config.createConfig(values, cb)
-    }
-    else {
+    } else {
       cb()
     }
   })

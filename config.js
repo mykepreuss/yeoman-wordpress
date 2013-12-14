@@ -16,8 +16,8 @@ var home            = process.env.HOME || process.env.USERPROFILE
   , defaults = {
       authorName: ''
     , authorURI:  ''
-    , themeUrl:   'https://github.com/automattic/_s'
-    , latestVersion: '3.6'
+    , themeUrl:   'https://github.com/mykepreuss/roots'
+    , latestVersion: '1.0'
   }
 
 /**
