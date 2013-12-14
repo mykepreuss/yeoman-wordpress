@@ -1,0 +1,31 @@
+// You should probably just use this mixin that's already a part of Compass
+// @import "compass/css3/box-sizing"
+// See: http://compass-style.org/reference/compass/css3/box_sizing/
+
+// Box sizing
+@mixin box-sizing($boxmodel:border-box) {
+	-webkit-box-sizing: $boxmodel;
+	-moz-box-sizing: $boxmodel;
+	box-sizing: $boxmodel;
+}
+
+// You should probably just use this mixin that's already a part of compass
+// @import "compass/css3/font-face"
+// See: http://compass-style.org/reference/compass/css3/font_face/
+
+//Font Face
+@mixin font-face($name, $filename, $path, $weight:normal, $style:normal){
+	@font-face {
+		font-family: '$name';
+		src: url('#{$path}/@{filename}.eot');
+		// used when developing fonts
+		src: url('#{$path}/@{filename}.otf') format('opentype'),
+			url('#{$path}/@{filename}.eot?#iefix') format('embedded-opentype'),
+	  		url('#{$path}/@{filename}.woff') format('woff'),
+			url('#{$path}/@{filename}.ttf') format('truetype'),
+			url('#{$path}/@{filename}.svg') format('svg');
+
+	  font-weight: $weight;
+	  font-style: $style;
+	}
+}

@@ -1,0 +1,23 @@
+// Box sizing
+.box-sizing(@boxmodel:border-box) {
+	-webkit-box-sizing: @boxmodel;
+	-moz-box-sizing: @boxmodel;
+	box-sizing: @boxmodel;
+}
+
+//Font Face
+.font-face(@name, @filename, @path, @weight:normal, @style:normal){
+	@font-face {
+		font-family: '@{name}';
+		src: url('@{path}/@{filename}.eot');
+		// used when developing fonts
+		src: url('@{path}/@{filename}.otf') format('opentype'), 
+			url('@{path}/@{filename}.eot?#iefix') format('embedded-opentype'),
+	  		url('@{path}/@{filename}.woff') format('woff'),
+			url('@{path}/@{filename}.ttf') format('truetype'),
+			url('@{path}/@{filename}.svg') format('svg');
+
+	  font-weight: @weight;
+	  font-style: @style;
+	}
+}

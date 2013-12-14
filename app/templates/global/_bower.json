@@ -2,8 +2,8 @@
 	"name": "<%= _.slugify(projectName) %>",
 	"version": "0.0.0",
 	"dependencies": {
-		"jquery": "1.10.*"
-	,	"font-awesome": "~4.0.3"<% if (includeRequireJS) { %>
+	  "jquery": "1.10.*"
+	, "font-awesome": "~4.0.3"<% if (includeRequireJS) { %>
 	, "requirejs": "~2.1.9"<% } if (includeModernizr) { %>
 	, "modernizr": "~2.7.1"<% } if (includeUnderscore) { %>
 	, "underscore": "~1.5.2"<% } if (includeBootstrap && includeLESS) { %>

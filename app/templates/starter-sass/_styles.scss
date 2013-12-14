@@ -1,0 +1,9 @@
+<% if (includeBootstrap) { %>
+	@import "../bower_components/sass-bootstrap/lib/bootstrap.scss";
+<% } if (includeFoundation) { %>
+	@import "../bower_components/foundation/normalize.scss";
+	@import "../bower_components/foundation/foundation.scss";
+<% } %>
+@import "site/variables";
+@import "site/mixins";
+@import "site/global";

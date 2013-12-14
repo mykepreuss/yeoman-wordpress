@@ -1,0 +1,19 @@
+{
+	"name": "<%= _.slugify(projectName) %>",
+	"version": "0.0.0",
+	"dependencies": {
+		"grunt": "~0.4.2",
+		"bower": "~1.2.8",
+		"grunt-contrib-jshint": "~0.6.3",
+		"grunt-contrib-watch": "~0.5.3",<% if (includeLESS) { %>
+		"grunt-contrib-less": "~0.8.2",<% } if (includeSASS) { %>
+		"grunt-contrib-sass": "~0.6.0",<% } %>
+		"grunt-browser-sync": "~0.2.6",
+		"grunt-requirejs": "~0.4.0",
+		"grunt-contrib-requirejs": "~0.4.1",
+		"grunt-contrib-copy": "~0.4.1"		
+	},
+	"engines": {
+		"node": ">=0.8.0"
+	}
+}

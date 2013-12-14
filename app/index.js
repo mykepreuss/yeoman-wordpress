@@ -323,26 +323,6 @@ Generator.prototype.createTheme = function createTheme() {
   })
 }
 
-// add Require.js if needed
-Generator.prototype.requireJS = function requireJS() {
-  var cb   = this.async()
-    , self = this
-
-  if (self.includeRequireJS) {
-    this.remote('jrburke', 'requirejs', '2.0.5', function(err, remote) {
-      if (err) { return cb(err) }
-
-      fs.mkdir('app/wp-content/themes/'+self.themeName+'/js', function() {
-        remote.copy('require.js', 'app/wp-content/themes/'+self.themeName+'/js/vendors/require.js')
-        cb()
-      })
-    })
-  }
-  else {
-    cb()
-  }
-}
-
 // rename all the css files to scss
 Generator.prototype.convertFiles = function convertFiles() {
   var cb   = this.async()
@@ -389,12 +369,52 @@ Generator.prototype.convertFiles = function convertFiles() {
 }
 
 // generate the files to use Yeoman and the git related files
+Generator.prototype.createThemeFiles = function createThemeFiles() {
+  if (this.includeLESS) {   
+    //Make the LESS Folders
+    this.mkdir('app/wp-content/themes/'+this.themeName+'/assets/less');
+    this.mkdir('app/wp-content/themes/'+this.themeName+'/assets/less/site');
+
+    //Copy the files over
+    this.copy('starter-less/_styles.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/styles.less');  
+    this.copy('starter-less/variables.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/site/variables.less');
+    this.copy('starter-less/mixins.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/site/mixins.less');
+    this.copy('starter-less/global.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/site/global.less');
+  }
+
+  if (this.includeSASS) {   
+    //Make the SASS folders
+    this.mkdir('app/wp-content/themes/'+this.themeName+'/assets/sass');
+    this.mkdir('app/wp-content/themes/'+this.themeName+'/assets/sass/site');
+
+    //Copy the files over
+    this.copy('starter-sass/_styles.scss', 'app/wp-content/themes/'+this.themeName+'/assets/sass/styles.scss');  
+    this.copy('starter-sass/variables.scss', 'app/wp-content/themes/'+this.themeName+'/assets/sass/site/variables.scss');
+    this.copy('starter-sass/mixins.scss', 'app/wp-content/themes/'+this.themeName+'/assets/sass/site/mixins.scss');
+    this.copy('starter-sass/global.scss', 'app/wp-content/themes/'+this.themeName+'/assets/sass/site/global.scss');      
+  }
+
+  if (this.includeRequireJS) {
+    this.copy('global/_main.js', 'app/wp-content/themes/'+this.themeName+'/assets/js/main.js');
+    this.copy('global/app.js', 'app/wp-content/themes/'+this.themeName+'/assets/js/app.js');
+  }  
+
+  this.mkdir('dist');
+}
+
+// generate the files to use Yeoman and the git related files
 Generator.prototype.createYeomanFiles = function createYeomanFiles() {
+
+  //this.copy('global/_package.json', 'package.json');
+  this.copy('global/_bower.json', 'bower.json');
+
   this.template('Gruntfile.js')
-  this.template('bowerrc', '.bowerrc')
+  this.template('global/bowerrc', '.bowerrc')
   this.copy('package.json', 'package.json')
-  this.copy('gitignore', '.gitignore')
-  this.copy('gitattributes', '.gitattributes')
+  this.copy('global/gitignore', '.gitignore')
+  this.copy('global/gitattributes', '.gitattributes')
+  this.copy('global/editorconfig', '.editorconfig');
+  this.copy('global/jshintrc', '.jshintrc');
 }
 
 Generator.prototype.endGenerator = function endGenerator() {
