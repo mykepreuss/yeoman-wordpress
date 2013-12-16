@@ -6,13 +6,13 @@ For more informations about Yeoman, see [Yeoman.io](http://yeoman.io/).
 
 ## Installation
 
-    npm install -g generator-assembly-wordpress
+    npm install -g generator-assembly-wp
 
 ## Documentation
 
 ### Init
 
-    yo assembly-wordpress
+    yo assembly-wp
 
 Generates a new WordPress project with a starter theme and the files needed to use Yeoman. Once Yeoman is done, install your new WordPress project, and activate the theme in the admin panel.
 
@@ -20,7 +20,7 @@ Yeoman will ask you which version of WordPress you want to use (latest stable ve
 
 ### Plugin
 
-    yo assembly-wordpress:plugin
+    yo assembly-wp:plugin
 
 Generates a plugin with [WordPress Plugin Boilerplate](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate).
 

@@ -1,5 +1,5 @@
 {
-  "name": "generator-assembly-wordpress",
+  "name": "generator-assembly-wp",
   "version": "0.0.1",
   "description": "Yeoman generator for Wordpress projects and plugins",
   "homepage": "https://github.com/mykepreuss/yeoman-wordpress",

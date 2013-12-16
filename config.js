@@ -11,7 +11,7 @@ module.exports = {
 }
 
 var home            = process.env.HOME || process.env.USERPROFILE
-  , configDirectory = path.join(home, '.yeoman-wordpress')
+  , configDirectory = path.join(home, '.yeoman-assembly-wp')
   , configPath      = path.join(configDirectory, 'config.json')
   , defaults = {
       authorName: ''

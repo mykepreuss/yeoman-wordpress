@@ -240,7 +240,9 @@ Generator.prototype.askFor = function askFor() {
 
 //Preprocessor Questions
     var framework = props.framework;
-    function whichframework(frameworkOptions) { return framework.indexOf(frameworkOptions) !== -1; }
+    function whichframework(frameworkOptions) { 
+        return framework.indexOf(frameworkOptions) !== -1; 
+    }
 
     self.includeBootstrap = whichframework('Bootstrap');
     self.includeFoundation = whichframework('Foundation');
@@ -248,14 +250,18 @@ Generator.prototype.askFor = function askFor() {
 
     //Framework Questions
     var preprocessor = props.preprocessor;
-    function whichPreprocessor(preprocessorOptions) { return preprocessor.indexOf(preprocessorOptions) !== -1; }
+    function whichPreprocessor(preprocessorOptions) { 
+        return preprocessor.indexOf(preprocessorOptions) !== -1; 
+    }
 
     self.includeLESS = whichPreprocessor('LESS');
     self.includeSASS = whichPreprocessor('SASS');
 
     //Feature Questions
     var features = props.features;
-    function hasFeature(feat) { return features.indexOf(feat) !== -1; }
+    function hasFeature(feat) { 
+        return features.indexOf(feat) !== -1; 
+    }
 
     self.includeRequireJS = hasFeature('includeRequireJS');
     self.includeModernizr = hasFeature('includeModernizr');
@@ -263,7 +269,9 @@ Generator.prototype.askFor = function askFor() {
 
     //Feature Questions
     var versionControl = props.versionControl;
-    function hasVersionControl(versionOption) { return versionControl.indexOf(versionOption) !== -1; }
+    function hasVersionControl(versionOption) { 
+      return versionControl.indexOf(versionOption) !== -1; 
+    }
 
     self.includeBitBucket = hasVersionControl('includeBitBucket');
     self.includeGitHub = hasVersionControl('includeGitHub');
@@ -405,12 +413,12 @@ Generator.prototype.createThemeFiles = function createThemeFiles() {
 // generate the files to use Yeoman and the git related files
 Generator.prototype.createYeomanFiles = function createYeomanFiles() {
 
-  //this.copy('global/_package.json', 'package.json');
-  this.copy('global/_bower.json', 'bower.json');
-
-  this.template('Gruntfile.js')
+  this.copy('global/_package.json', 'package.json')
   this.template('global/bowerrc', '.bowerrc')
-  this.copy('package.json', 'package.json')
+  this.copy('global/_bower.json', 'bower.json')
+
+  this.template('Gruntfile.js', 'Gruntfile.js')
+
   this.copy('global/gitignore', '.gitignore')
   this.copy('global/gitattributes', '.gitattributes')
   this.copy('global/editorconfig', '.editorconfig');
