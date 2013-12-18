@@ -149,7 +149,7 @@ Generator.prototype.askFor = function askFor() {
     { 
       type: 'list',
       name: 'framework',
-      message: 'Which front-end framework would you like?',
+      message: 'Which front-end framework would you like? (If you chose LESS don\'t choose Foundation)',
       choices: [
         {
           name: 'Bootstrap',
