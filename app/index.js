@@ -238,7 +238,7 @@ Generator.prototype.askFor = function askFor() {
       }
     }
 
-//Preprocessor Questions
+    //Preprocessor Questions
     var framework = props.framework;
     function whichframework(frameworkOptions) { 
         return framework.indexOf(frameworkOptions) !== -1; 
@@ -329,51 +329,6 @@ Generator.prototype.createTheme = function createTheme() {
     // create the theme
     self.tarball(self.themeBoilerplate, 'app/wp-content/themes/'+self.themeName, cb)
   })
-}
-
-// rename all the css files to scss
-Generator.prototype.convertFiles = function convertFiles() {
-  var cb   = this.async()
-    , self = this
-
-  // parse recursively a directory and rename the css files to .scss
-  function parseDirectory(path) {
-    fs.readdir(path, function(err, files) {
-      files.forEach(function(file) {
-        var pathFile = fs.realpathSync(path+'/'+file)
-          , isDirectory = fs.statSync(pathFile).isDirectory()
-
-        if (isDirectory) {
-          parseDirectory(pathFile)
-        }
-        else {
-          var cssName = /[.]*\.css/i
-          if (cssName.test(file)) {
-            var newName = pathFile.substring(0, pathFile.length - 3) + 'scss'
-            // to avoid deleting style.css which is needed to activate the them,
-            // we do not rename but only create another file then copy the content
-            fs.open(newName, 'w', '0666', function() {
-              fs.readFile(pathFile, 'utf8', function (err, data) {
-                if (err) throw err
-                // Insert the given theme name into SCSS and CSS files
-                data = data.replace(/^.*Theme Name:.*$/mg, 'Theme Name: ' + self.themeNameOriginal)
-                data = data.replace(/^.*Author: .*$/mg, 'Author: ' + self.authorName)
-                data = data.replace(/^.*Author URI: .*$/mg, 'Author URI: ' + self.authorURI)
-
-                fs.writeFile(newName, data)
-                fs.writeFile(pathFile, data)
-              })
-            })
-          }
-        }
-      })
-    })
-  }
-
-  this.log.writeln('Renaming the css files to scss')
-  parseDirectory('app/wp-content/themes/'+self.themeName)
-
-  cb()
 }
 
 // generate the files to use Yeoman and the git related files

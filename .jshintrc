@@ -1,5 +1,23 @@
 {
     "node": true,
-    "laxcomma": true,
-    "asi": true
+    "browser": true,
+    "esnext": true,
+    "bitwise": true,
+    "curly": true,
+    "eqeqeq": true,
+    "immed": true,
+    "indent": 4,
+    "latedef": true,
+    "newcap": true,
+    "noarg": true,
+    "quotmark": "single",
+    "regexp": true,
+    "undef": true,
+    "unused": true,
+    "trailing": true,
+    "smarttabs": true,
+    "jquery": true,
+    "globals": {
+        "_": true
+  }
 }

@@ -14,14 +14,6 @@ module.exports = function(grunt) {
   grunt.initConfig({
     yeomanConfig: yeomanConfig,
     watch: {
-      coffee: {
-        files: ['app/wp-content/themes/<%%= yeomanConfig.themeName %>/js/*.coffee'],
-        tasks: ['coffee:dist']
-      },
-      coffeeTest: {
-        files: ['test/spec/{,*/}*.coffee'],
-        tasks: ['coffee:test']
-      },
       compass: {
         files: ['app/wp-content/themes/<%%= yeomanConfig.themeName %>/{,*/}*.{scss,sass}'],
         tasks: ['compass:server', 'autoprefixer']
@@ -97,34 +89,6 @@ module.exports = function(grunt) {
             '!app/wp-content/themes/<%%= yeomanConfig.themeName %>/js/vendor/*',
             'test/spec/{,*/}*.js'
         ]
-    },
-    mocha: {
-        all: {
-            options: {
-                run: true,
-                urls: ['http://<%%= connect.test.options.hostname %>:<%%= connect.test.options.port %>/index.html']
-            }
-        }
-    },
-    coffee: {
-        dist: {
-            files: [{
-                expand: true,
-                cwd: 'app/wp-content/themes/<%%= yeomanConfig.themeName %>/js',
-                src: '{,*/}*.coffee',
-                dest: '.tmp/scripts',
-                ext: '.js'
-            }]
-        },
-        test: {
-            files: [{
-                expand: true,
-                cwd: 'test/spec',
-                src: '{,*/}*.coffee',
-                dest: '.tmp/spec',
-                ext: '.js'
-            }]
-        }
     },
     compass: {
         options: {
