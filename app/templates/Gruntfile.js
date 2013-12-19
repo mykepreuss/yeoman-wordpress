@@ -12,14 +12,27 @@ module.exports = function(grunt) {
 					'app/wp-content/themes/<%= themeName %>/assets/sass/site/*.scss'<% } %>
 				],
 				tasks: [<% if (includeLESS) { %>
-					'less:development',<% } if (includeSASS) { %>
-					'sass:development',<% } %>
-					'autoprefixer'
+					'less:development'<% } if (includeSASS) { %>
+					'sass:development'<% } %>
 				],
 				options: {
 					livereload: true
 				}
-			},<% if (includeLESS) { %>
+			},
+			browser_sync: {
+				files: {
+					src : [
+						'app/wp-content/themes/<%= themeName %>/*.css',
+						'app/wp-content/themes/<%= themeName %>/assets/img/*',
+						'app/wp-content/themes/<%= themeName %>/assets/js/*.js',
+						'app/wp-content/themes/<%= themeName %>/*.php'
+					],
+				},
+				options: {
+					watchTask: true
+				}
+			},
+			<% if (includeLESS) { %>
 			less: {
 				development: {
 					options: {
@@ -38,7 +51,7 @@ module.exports = function(grunt) {
 						'dist/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/less/styles.less'
 					}
 				}
-			},<% } if (includeSASS) { %>
+			}<% } if (includeSASS) { %>
 			sass: {
 				development: {
 					files: {
@@ -53,68 +66,18 @@ module.exports = function(grunt) {
 						'dist/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/sass/styles.scss'
 					}
 				}
-			},<% } %>
-			// The Compass integration needs to be configured
-			// compass: {
-			//	 files: ['app/wp-content/themes/<%= themeName %>/{,*/}*.{scss,sass}'],
-			//	 tasks: ['compass:server', 'autoprefixer']
-			// },		
-			livereload: {
-				options: {
-					livereload: '<%%= connect.options.livereload %>'
-				},
-				files: [
-					'app/wp-content/themes/<%= themeName %>/*.php',
-					'app/wp-content/themes/<%= themeName %>/styles.css',
-					'app/wp-content/themes/<%= themeName %>/assets/js/*.js',
-					'app/wp-content/themes/<%= themeName %>/assets/img/*'
-				]
-			}
-		},
-		connect: {
-			options: {
-				port: 9000,
-				livereload: 35729,
-				// change this to '0.0.0.0' to access the server from outside
-				hostname: 'localhost'
-			},
-			livereload: {
-				options: {
-					open: true,
-					base: [
-						'.tmp',
-						'app/wp-content/themes/<%= themeName %>'
-					]
-				}
-			},
-			test: {
-				options: {
-					base: [
-						'.tmp',
-						'test',
-						'app/wp-content/themes/<%= themeName %>'
-					]
-				}
-			},
-			dist: {
-				options: {
-					open: true,
-					base: 'dist'
-				}
-			}
+			}<% } %>
 		},
 		clean: {
 			dist: {
 				files: [{
 					dot: true,
 					src: [
-						'.tmp',
 						'dist/*',
 						'dist/.git*'
 					]
 				}]
-			},
-			server: '.tmp'
+			}
 		},
 		jshint: {
 			options: {
@@ -122,9 +85,7 @@ module.exports = function(grunt) {
 			},
 			all: [
 				'Gruntfile.js',
-				'app/wp-content/themes/<%= themeName %>/js/{,*/}*.js',
-				'!app/wp-content/themes/<%= themeName %>/js/vendor/*',
-				'test/spec/{,*/}*.js'
+				'app/wp-content/themes/<%= themeName %>/assets/js/{,*/}*.js'
 			]
 		},<% if (includeSASS) { %>
 		// Configuration needs to be completed
@@ -136,48 +97,30 @@ module.exports = function(grunt) {
 				imagesDir: 'app/wp-content/themes/<%= themeName %>/img',
 				javascriptsDir: 'app/wp-content/themes/<%= themeName %>/js',
 				fontsDir: 'app/wp-content/themes/<%= themeName %>/css/fonts',
-				httpImagesPath: '/wp-content/themes/<%= themeName %>/img',
-				httpGeneratedImagesPath: '/wp-content/themes/<%= themeName %>/img',
-				httpFontsPath: '/wp-content/themes/<%= themeName %>/fonts',
+				httpImagesPath: 'app/wp-content/themes/<%= themeName %>/img',
+				httpGeneratedImagesPath: 'app/wp-content/themes/<%= themeName %>/img',
+				httpFontsPath: 'app/wp-content/themes/<%= themeName %>/fonts',
 				relativeAssets: false
 			},
 			dist: {
 				options: {
 					generatedImagesDir: 'dist/wp-content/themes/<%= themeName %>/img/generated'
 				}
-			},
-			server: {
-				options: {
-						debugInfo: true
-				}
 			}
-		},<% } %>
-		autoprefixer: {
-			options: {
-				browsers: ['last 1 version']
-			},
-			dist: {
-				files: [{
-					expand: true,
-					cwd: '.tmp/styles/',
-					src: '{,*/}*.css',
-					dest: '.tmp/styles/'
-				}]
-			}
-		},<% if (includeRequireJS) { %>
+		},<% } if (includeRequireJS) { %>
 		requirejs: {
 			dist: {
 				// Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
 				options: {
 					// `name` and `out` is set by grunt-usemin
-					baseUrl: 'app/wp-content/themes/<%= themeName %>/js',
+					baseUrl: 'app/wp-content/themes/<%= themeName %>/assets/js',
 					mainConfigFile: 'app/wp-content/themes/<%= themeName %>/assets/js/main.js',
 					paths: {
 						jquery: 'empty:',
 						underscore: 'empty:',
 						app: 'app'
 					},
-					dir: 'dist/assets/js',
+					dir: 'dist/wp-content/themes/<%= themeName %>/assets/js',
 					shim: {
 						underscore: {
 							deps: ['jquery'],
@@ -190,25 +133,13 @@ module.exports = function(grunt) {
 				}
 			}
 		},<% } %>
-		rev: {
-			dist: {
-				files: {
-					src: [
-						'dist/scripts/{,*/}*.js',
-						'dist/styles/{,*/}*.css',
-						'dist/images/{,*/}*.{png,jpg,jpeg,gif,webp}',
-						'dist/styles/fonts/{,*/}*.*'
-					]
-				}
-			}
-		},
 		imagemin: {
 			dist: {
 				files: [{
 					expand: true,
-					cwd: 'app/wp-content/themes/<%= themeName %>/images',
+					cwd: 'app/wp-content/themes/<%= themeName %>/assets/img',
 					src: '{,*/}*.{png,jpg,jpeg}',
-					dest: 'dist/images'
+					dest: 'dist/wp-content/themes/<%= themeName %>/assets/img'
 				}]
 			}
 		},
@@ -216,9 +147,9 @@ module.exports = function(grunt) {
 			dist: {
 				files: [{
 					expand: true,
-					cwd: 'app/wp-content/themes/<%= themeName %>/images',
+					cwd: 'wp-content/themes/<%= themeName %>/assets/img',
 					src: '{,*/}*.svg',
-					dest: 'dist/images'
+					dest: 'dist/wp-content/themes/<%= themeName %>/assets/img'
 				}]
 			}
 		},
@@ -228,32 +159,31 @@ module.exports = function(grunt) {
 				files: [{
 					expand: true,
 					dot: true,
-					cwd: 'app/wp-content/themes/<%= themeName %>',
+					cwd: 'app',
 					dest: 'dist',
 					src: [
-						'*.{ico,png,txt}',
+						'*.{ico,png,txt,php}',
 						'.htaccess',
-						'images/{,*/}*.{webp,gif}',
-						'styles/fonts/{,*/}*.*',
-						'bower_components/sass-bootstrap/fonts/*.*'
+						'wp-admin/*',
+						'wp-includes/*',
+						'wp-content/plugins/*',
+						'wp-content/themes/<%= themeName %>/*.{php,md,png,css}',
+						'wp-content/themes/<%= themeName %>/templates/*',
+						'wp-content/themes/<%= themeName %>/lib/*',
+						'wp-content/themes/<%= themeName %>/lang/*',
+						'wp-content/themes/<%= themeName %>/assets/fonts/{,*/}*.*'
 					]
 				}]
 			}
 		},
 		concurrent: {
-			server: [
-				'compass',
-			],
 			dist: [
+				<% if (includeSASS) { %>
 				'compass',
+				<% } %>
 				'imagemin',
 				'svgmin'
 			]
-		},
-		bower: {
-			all: {
-				rjsConfig: 'app/wp-content/themes/<%= themeName %>/assets/js/main.js'
-			}
 		}
 	});
 
@@ -267,50 +197,22 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-browser-sync');
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
-	grunt.loadNpmTasks('grunt-bower-requirejs');
 	grunt.loadNpmTasks('grunt-contrib-copy');
-	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-imagemin');
-	grunt.loadNpmTasks('grunt-contrib-copy');
-	grunt.loadNpmTasks('grunt-rev');
-	grunt.loadNpmTasks('grunt-autoprefixer');
 	grunt.loadNpmTasks('grunt-svgmin');
 	grunt.loadNpmTasks('grunt-concurrent');
-
-
-	grunt.registerTask('server', function (target) {
-		if (target === 'dist') {
-			return grunt.task.run(['build', 'connect:dist:keepalive']);
-		}
-
-		grunt.task.run([
-			'clean:server',
-			'concurrent:server',
-			'autoprefixer',
-			'connect:livereload',
-			'watch'
-		]);
-	});
-
-	grunt.registerTask('test', [
-		'clean:server',
-		'autoprefixer',
-		'connect:test'
-	]);
 
 	grunt.registerTask('build', [
 		'clean:dist',
 		'concurrent:dist',
-		'autoprefixer',
 		'requirejs',
-		'copy:dist',
-		'rev'
+		'copy:dist'
 	]);
 
 	grunt.registerTask('default', [
 		'jshint',
-		'test',
-		'build'
+		'build',
+		'browser_sync'
 	]);
 };
