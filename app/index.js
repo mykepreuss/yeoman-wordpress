@@ -337,25 +337,9 @@ Generator.prototype.addACF = function addACF() {
   var cb   = this.async()
     , self = this
 
-  this.log.writeln('First let\'s remove the built-in plugins we will not use')
-  // remove the existing plugins
   fs.readdir('app/wp-content/plugins', function(err, files) {
-    if (typeof files != 'undefined' && files.length !== 0) {
-      files.forEach(function(file) {
-        var pathFile = fs.realpathSync('app/wp-content/plugins/'+file)
-          , isDirectory = fs.statSync(pathFile).isDirectory()
-
-        if (isDirectory) {
-          rimraf.sync(pathFile)
-          self.log.writeln('Removing ' + pathFile)
-        }
-      })
-    }
-
     self.log.writeln('')
     self.log.writeln('Now we download Advanced Custom Fields')
-
-    // create the theme
     self.tarball('https://github.com/elliotcondon/acf/archive/master.zip', 'app/wp-content/plugins/acf', cb)
   })
 }
