@@ -9,6 +9,7 @@ var util   = require('util')
   , exec   = require('child_process').exec
   , semver = require('semver')
   , config = require('./../config.js')
+  , git = require('simple-git')()
 
 module.exports = Generator
 
@@ -379,6 +380,46 @@ Generator.prototype.createYeomanFiles = function createYeomanFiles() {
   this.copy('global/editorconfig', '.editorconfig');
   this.copy('global/jshintrc', '.jshintrc');
 }
+
+// Git setup
+Generator.prototype.initGit = function initGit() {
+  var cb = this.async();
+  
+  if (this.includeBitBucket) {
+    var accountName = this.accountName;
+    var repoName = this.repoName;
+    var repoURL = 'https://bitbucket.org/'+ accountName +'/'+ repoName +'.git';
+  }
+
+  if (this.includeGitHub) {
+    var accountName = this.accountName;
+    var repoName = this.repoName;
+    var repoURL = 'https://github.com/'+ accountName +'/'+ repoName +'.git';
+  }
+
+  console.log('Initializing Git');
+
+  git.init(function(err) {
+    
+    if (err) console.log(err);
+    console.log('Git init complete');
+
+    git.add('--all', function(err) {
+
+      if (err) console.log(err);
+    
+    }).addRemote('origin', repoURL)
+    .commit('Initial Commit', function(err, d) {
+
+      if (err) console.log(err);  
+      console.log('Git add and commit complete: ' + JSON.stringify(d, null, '  '));
+    
+    })
+    .push('origin', 'master');
+    
+    cb();
+  });
+};
 
 Generator.prototype.endGenerator = function endGenerator() {
   this.log.writeln('')

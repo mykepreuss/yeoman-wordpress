@@ -19,7 +19,8 @@
   "dependencies": {
     "yeoman-generator": ">=0.13.4",
     "rimraf": ">=2.1.4",
-    "semver": ">=2.0.10"
+    "semver": ">=2.0.10",
+    "simple-git": "~0.4.0"
   },
   "peerDependencies": {
     "yo": ">=1.0.4"
