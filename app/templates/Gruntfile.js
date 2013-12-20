@@ -19,55 +19,65 @@ module.exports = function(grunt) {
 					livereload: true
 				}
 			},
-			browser_sync: {
-				files: {
-					src : [
-						'app/wp-content/themes/<%= themeName %>/*.css',
-						'app/wp-content/themes/<%= themeName %>/assets/img/*',
-						'app/wp-content/themes/<%= themeName %>/assets/js/*.js',
-						'app/wp-content/themes/<%= themeName %>/*.php'
-					],
-				},
+			js: {
+				files: [
+					'app/wp-content/themes/<%= themeName %>/assets/js/*.js',
+					'Gruntfile.js'
+				],
+				tasks: ['jshint'],
 				options: {
-					watchTask: true
+					livereload: true,
+				}
+			}
+		},
+		browser_sync: {
+			files: {
+				src : [
+					'app/wp-content/themes/<%= themeName %>/*.css',
+					'app/wp-content/themes/<%= themeName %>/assets/img/*',
+					'app/wp-content/themes/<%= themeName %>/assets/js/*.js',
+					'app/wp-content/themes/<%= themeName %>/{,*/}*.php'
+				],
+			},
+			options: {
+				watchTask: true
+			}
+		},
+		<% if (includeLESS) { %>
+		less: {
+			development: {
+				options: {
+					paths: 'app/wp-content/themes/<%= themeName %>/'
+				},
+				files: {
+					'app/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/less/styles.less'
 				}
 			},
-			<% if (includeLESS) { %>
-			less: {
-				development: {
-					options: {
-						paths: 'app/wp-content/themes/<%= themeName %>/'
-					},
-					files: {
-						'app/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/less/styles.less'
-					}
+			production: {
+				options: {
+					paths: 'app/wp-content/themes/<%= themeName %>/',
+					cleancss: true
 				},
-				production: {
-					options: {
-						paths: 'app/wp-content/themes/<%= themeName %>/',
-						cleancss: true
-					},
-					files: {
-						'dist/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/less/styles.less'
-					}
+				files: {
+					'dist/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/less/styles.less'
 				}
-			}<% } if (includeSASS) { %>
-			sass: {
-				development: {
-					files: {
-						'app/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/sass/styles.scss'
-					}
+			}
+		},<% } if (includeSASS) { %>
+		sass: {
+			development: {
+				files: {
+					'app/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/sass/styles.scss'
+				}
+			},
+			production: {
+				options: {
+					style: 'compressed'
 				},
-				production: {
-					options: {
-						style: 'compressed'
-					},
-					files: {
-						'dist/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/sass/styles.scss'
-					}
+				files: {
+					'dist/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/sass/styles.scss'
 				}
-			}<% } %>
-		},
+			}
+		},<% } %>
 		clean: {
 			dist: {
 				files: [{
@@ -211,8 +221,9 @@ module.exports = function(grunt) {
 	]);
 
 	grunt.registerTask('default', [
+		'browser_sync',
+		'watch',
 		'jshint',
-		'build',
-		'browser_sync'
+		'build'
 	]);
 };
