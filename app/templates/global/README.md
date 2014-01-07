@@ -1,0 +1,2 @@
+# <%= themeName %> project
+---
