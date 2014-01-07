@@ -50,7 +50,7 @@ module.exports = function(grunt) {
 					paths: 'app/wp-content/themes/<%= themeName %>/'
 				},
 				files: {
-					'app/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/less/styles.less'
+					'app/wp-content/themes/<%= themeName %>/style.css': 'app/wp-content/themes/<%= themeName %>/assets/less/style.less'
 				}
 			},
 			production: {
@@ -59,14 +59,14 @@ module.exports = function(grunt) {
 					cleancss: true
 				},
 				files: {
-					'dist/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/less/styles.less'
+					'dist/wp-content/themes/<%= themeName %>/style.css': 'app/wp-content/themes/<%= themeName %>/assets/less/style.less'
 				}
 			}
 		},<% } if (includeSASS) { %>
 		sass: {
 			development: {
 				files: {
-					'app/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/sass/styles.scss'
+					'app/wp-content/themes/<%= themeName %>/style.css': 'app/wp-content/themes/<%= themeName %>/assets/sass/style.scss'
 				}
 			},
 			production: {
@@ -74,7 +74,7 @@ module.exports = function(grunt) {
 					style: 'compressed'
 				},
 				files: {
-					'dist/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/sass/styles.scss'
+					'dist/wp-content/themes/<%= themeName %>/style.css': 'app/wp-content/themes/<%= themeName %>/assets/sass/style.scss'
 				}
 			}
 		},<% } %>
@@ -202,7 +202,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-less');
 	<% } if (includeSASS) { %>
 	grunt.loadNpmTasks('grunt-contrib-sass');
-	<% } %>	
+	<% } %>
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-browser-sync');

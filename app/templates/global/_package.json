@@ -1,5 +1,7 @@
 {
 	"name": "<%= themeName %>",
+	"description": "<%= themeName %> WordPress Site",
+	"repository": "",
 	"version": "0.0.1",
 	"dependencies": {
 		"grunt": "~0.4.2",
@@ -17,7 +19,7 @@
 		"grunt-contrib-imagemin": "~0.2.0",
 		"grunt-contrib-copy": "~0.4.1",
 		"grunt-rev": "~0.1.0",
-    	"grunt-autoprefixer": "~0.2.0",		
+    	"grunt-autoprefixer": "~0.2.0",
 		"grunt-svgmin": "~0.2.0",
 		"grunt-concurrent": "~0.3.0"
 	},

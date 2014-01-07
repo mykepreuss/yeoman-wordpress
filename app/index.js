@@ -115,7 +115,7 @@ Generator.prototype.askFor = function askFor() {
           filter: function (input) {
             return input.replace(/\ /g, '').toLowerCase()
           },
-          validate: requiredValidate          
+          validate: requiredValidate
       },
       {
           name: 'wordpressVersion',
@@ -131,8 +131,8 @@ Generator.prototype.askFor = function askFor() {
           name: 'authorURI',
           message: 'Author URI',
           default: self.defaultAuthorURI
-      }, 
-    { 
+      },
+    {
       type: 'list',
       name: 'preprocessor',
       message: 'Which CSS Preprocessor would you like?',
@@ -146,8 +146,8 @@ Generator.prototype.askFor = function askFor() {
           value: 'includeSASS'
         }
       ]
-    }, 
-    { 
+    },
+    {
       type: 'list',
       name: 'framework',
       message: 'Which front-end framework would you like? (If you chose LESS don\'t choose Foundation)',
@@ -166,7 +166,7 @@ Generator.prototype.askFor = function askFor() {
         }
       ]
     },
-    { 
+    {
       type: 'checkbox',
       name: 'features',
       message: 'jQuery is included by default so what more would you like?',
@@ -175,20 +175,20 @@ Generator.prototype.askFor = function askFor() {
           name: 'RequireJS',
           value: 'includeRequireJS',
           checked: true
-        }, 
+        },
         {
           name: 'Modernizr',
           value: 'includeModernizr',
           checked: true
-        }, 
+        },
         {
           name: 'Underscore',
           value: 'includeUnderscore',
           checked: true
         }
       ]
-    }, 
-    { 
+    },
+    {
       type: 'list',
       name: 'versionControl',
       message: 'Which version control service are you using?',
@@ -241,8 +241,8 @@ Generator.prototype.askFor = function askFor() {
 
     //Preprocessor Questions
     var framework = props.framework;
-    function whichframework(frameworkOptions) { 
-        return framework.indexOf(frameworkOptions) !== -1; 
+    function whichframework(frameworkOptions) {
+        return framework.indexOf(frameworkOptions) !== -1;
     }
 
     self.includeBootstrap = whichframework('Bootstrap');
@@ -251,8 +251,8 @@ Generator.prototype.askFor = function askFor() {
 
     //Framework Questions
     var preprocessor = props.preprocessor;
-    function whichPreprocessor(preprocessorOptions) { 
-        return preprocessor.indexOf(preprocessorOptions) !== -1; 
+    function whichPreprocessor(preprocessorOptions) {
+        return preprocessor.indexOf(preprocessorOptions) !== -1;
     }
 
     self.includeLESS = whichPreprocessor('LESS');
@@ -260,8 +260,8 @@ Generator.prototype.askFor = function askFor() {
 
     //Feature Questions
     var features = props.features;
-    function hasFeature(feat) { 
-        return features.indexOf(feat) !== -1; 
+    function hasFeature(feat) {
+        return features.indexOf(feat) !== -1;
     }
 
     self.includeRequireJS = hasFeature('includeRequireJS');
@@ -270,8 +270,8 @@ Generator.prototype.askFor = function askFor() {
 
     //Feature Questions
     var versionControl = props.versionControl;
-    function hasVersionControl(versionOption) { 
-      return versionControl.indexOf(versionOption) !== -1; 
+    function hasVersionControl(versionOption) {
+      return versionControl.indexOf(versionOption) !== -1;
     }
 
     self.includeBitBucket = hasVersionControl('includeBitBucket');
@@ -279,7 +279,7 @@ Generator.prototype.askFor = function askFor() {
 
     self.accountName = props.accountName;
     self.repoName = props.repoName;
-    
+
     // create the config file it does not exist
     if (!self.configExists) {
       var values = {
@@ -346,35 +346,40 @@ Generator.prototype.addACF = function addACF() {
 
 // generate the files to use Yeoman and the git related files
 Generator.prototype.createThemeFiles = function createThemeFiles() {
-  if (this.includeLESS) {   
+  if (this.includeLESS) {
     //Make the LESS Folders
     this.mkdir('app/wp-content/themes/'+this.themeName+'/assets/less');
     this.mkdir('app/wp-content/themes/'+this.themeName+'/assets/less/site');
 
     //Copy the files over
-    this.copy('starter-less/_styles.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/styles.less');  
+    this.copy('starter-less/_style.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/style.less');
     this.copy('starter-less/variables.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/site/variables.less');
     this.copy('starter-less/mixins.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/site/mixins.less');
     this.copy('starter-less/global.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/site/global.less');
   }
 
-  if (this.includeSASS) {   
+  if (this.includeSASS) {
     //Make the SASS folders
     this.mkdir('app/wp-content/themes/'+this.themeName+'/assets/sass');
     this.mkdir('app/wp-content/themes/'+this.themeName+'/assets/sass/site');
 
     //Copy the files over
-    this.copy('starter-sass/_styles.scss', 'app/wp-content/themes/'+this.themeName+'/assets/sass/styles.scss');  
+    this.copy('starter-sass/_style.scss', 'app/wp-content/themes/'+this.themeName+'/assets/sass/style.scss');
     this.copy('starter-sass/variables.scss', 'app/wp-content/themes/'+this.themeName+'/assets/sass/site/variables.scss');
     this.copy('starter-sass/mixins.scss', 'app/wp-content/themes/'+this.themeName+'/assets/sass/site/mixins.scss');
-    this.copy('starter-sass/global.scss', 'app/wp-content/themes/'+this.themeName+'/assets/sass/site/global.scss');      
+    this.copy('starter-sass/global.scss', 'app/wp-content/themes/'+this.themeName+'/assets/sass/site/global.scss');
   }
 
   if (this.includeRequireJS) {
     this.copy('global/_main.js', 'app/wp-content/themes/'+this.themeName+'/assets/js/main.js');
     this.copy('global/app.js', 'app/wp-content/themes/'+this.themeName+'/assets/js/app.js');
-  }  
+  }
 
+  //Make folder for browser_sync file and copy over
+  this.mkdir('app/wp-content/themes/'+this.themeName+'/templates/partials');
+  this.copy('global/browser_sync.php', 'app/wp-content/themes/'+this.themeName+'/templates/partials');
+
+  //Make folder for distribution
   this.mkdir('dist');
 }
 
@@ -384,6 +389,7 @@ Generator.prototype.createYeomanFiles = function createYeomanFiles() {
   this.copy('global/_package.json', 'package.json')
   this.template('global/bowerrc', '.bowerrc')
   this.copy('global/_bower.json', 'bower.json')
+  this.copy('global/README.md', 'README.md')
 
   this.template('Gruntfile.js', 'Gruntfile.js')
 
@@ -396,7 +402,7 @@ Generator.prototype.createYeomanFiles = function createYeomanFiles() {
 // Git setup
 Generator.prototype.initGit = function initGit() {
   var cb = this.async();
-  
+
   if (this.includeBitBucket) {
     var accountName = this.accountName;
     var repoName = this.repoName;
@@ -412,23 +418,23 @@ Generator.prototype.initGit = function initGit() {
   console.log('Initializing Git');
 
   git.init(function(err) {
-    
+
     if (err) console.log(err);
     console.log('Git init complete');
 
     git.add('--all', function(err) {
 
       if (err) console.log(err);
-    
+
     }).addRemote('origin', repoURL)
     .commit('Initial Commit', function(err, d) {
 
-      if (err) console.log(err);  
+      if (err) console.log(err);
       console.log('Git add and commit complete: ' + JSON.stringify(d, null, '  '));
-    
+
     })
     .push('origin', 'master');
-    
+
     cb();
   });
 };
