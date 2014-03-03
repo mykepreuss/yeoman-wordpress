@@ -77,7 +77,7 @@ module.exports = function(grunt) {
 				options: {
 					sourceMap: true,
 					sourceMapFilename: app + 'style.css.map',
-					sourceMapURL: app + 'style.css.map',
+					sourceMapURL: '/wp-content/themes/<%= themeName %> /style.css.map',
 					sourceMapBasepath: 'public',
 					sourceMapRootpath: '/'
 				},
@@ -131,7 +131,7 @@ module.exports = function(grunt) {
 			},
 			dist: {
 				options: {
-					generatedImagesDir: app + 'img/generated'
+					generatedImagesDir: dist + 'img/generated'
 				}
 			}
 		},<% } if (includeRequireJS) { %>
@@ -243,14 +243,8 @@ module.exports = function(grunt) {
 		},
 		concurrent: {
 			dev: ['clean:dist', 'preprocess:dev'],
-			build1: ['imagemin:dist', 'copy:dist', 'less:dist'],
+			build1: ['imagemin:dist', 'copy:dist', <% if (includeLESS) { %> 'less:dist' <% } %>, if (includeSASS) { %>'sass:dist'<% } %>],
 			build2: ['preprocess:dist', 'svgmin:dist']
-
-			dist: [	<% if (includeSASS) { %>
-				'compass', <% } %>
-				'imagemin',
-				'svgmin'
-			]
 		}
 	});
 
