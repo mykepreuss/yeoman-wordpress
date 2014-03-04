@@ -248,12 +248,13 @@ module.exports = function(grunt) {
 		}
 	});
 
+	require('time-grunt')(grunt);
+
 	// Load the Grunt plugins.
 	<% if (includeLESS) { %>
 	grunt.loadNpmTasks('grunt-contrib-less');<% } if (includeSASS) { %>
 	grunt.loadNpmTasks('grunt-contrib-sass');<% } %>
 	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-browser-sync');
 	grunt.loadNpmTasks('grunt-contrib-copy');
