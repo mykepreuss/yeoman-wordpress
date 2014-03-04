@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 			css: {
 				files: [<% if (includeLESS) { %>
 					app + '/assets/less/*.less',
-					app + '/assets/less/site/*.less'<% } if (includeSASS) { %>
+					app + '/assets/less/site/*.less',<% } if (includeSASS) { %>
 					app + '/assets/sass/*.scss',
 					app + '/assets/sass/site/*.scss'<% } %>
 				],
@@ -42,7 +42,7 @@ module.exports = function(grunt) {
 				],
 			},
 			options: {
-				watchTask: true
+				watchTask: true,
 				host: '<%= themeName %>',
 				port: 8888
 			}
