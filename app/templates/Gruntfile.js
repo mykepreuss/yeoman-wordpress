@@ -8,10 +8,10 @@ module.exports = function(grunt) {
 		watch: {
 			css: {
 				files: [<% if (includeLESS) { %>
-					app + '/assets/less/*.less',
-					app + '/assets/less/site/*.less'<% } if (includeSASS) { %>
-					app + '/assets/sass/*.scss',
-					app + '/assets/sass/site/*.scss'<% } %>
+					app + 'assets/less/*.less',
+					app + 'assets/less/site/*.less'<% } if (includeSASS) { %>
+					app + 'assets/sass/*.scss',
+					app + 'assets/sass/site/*.scss'<% } %>
 				],
 				tasks: [<% if (includeLESS) { %>
 					'less:development'<% } if (includeSASS) { %>
@@ -51,8 +51,8 @@ module.exports = function(grunt) {
 			development: {
 				options: {
 					sourceMap: true,
-					sourceMapFilename: app + '/style.css.map',
-					sourceMapURL: '/wp-content/themes/<%= themeName %> /style.css.map',
+					sourceMapFilename: app + 'style.css.map',
+					sourceMapURL: '/wp-content/themes/<%= themeName %>/style.css.map',
 					sourceMapBasepath: 'public',
 					sourceMapRootpath: '/'
 				},
@@ -231,7 +231,7 @@ module.exports = function(grunt) {
 		hashres: {
 			options: {
 				encoding: 'utf8',
-				fileNameFormat: '${name}.${ext}?${hash}',
+				fileNameFormat: '<%='${name}.${ext}?${hash}' %>',
 				renameFiles: false
 			},
 			css: {
@@ -243,7 +243,7 @@ module.exports = function(grunt) {
 		},
 		concurrent: {
 			dev: ['clean:dist', 'preprocess:dev'],
-			build1: ['imagemin:dist', 'copy:dist' <% if (includeLESS) { %>, 'less:dist' <% } if (includeSASS) { %>, 'sass:dist'<% } %>],
+			build1: ['imagemin:dist', 'copy:dist',<% if (includeLESS) { %> 'less:dist'<% } if (includeSASS) {%> 'sass:dist'<% } %>],
 			build2: ['preprocess:dist', 'svgmin:dist']
 		}
 	});
