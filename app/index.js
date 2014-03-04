@@ -375,10 +375,6 @@ Generator.prototype.createThemeFiles = function createThemeFiles() {
     this.copy('global/app.js', 'app/wp-content/themes/'+this.themeName+'/assets/js/app.js');
   }
 
-  //Make folder for browser_sync file and copy over
-  this.mkdir('app/wp-content/themes/'+this.themeName+'/templates/partials');
-  this.copy('global/browser_sync.php', 'app/wp-content/themes/'+this.themeName+'/templates/partials');
-
   //Make folder for distribution
   this.mkdir('dist');
 }
