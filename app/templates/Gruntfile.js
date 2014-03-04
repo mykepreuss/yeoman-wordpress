@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 			css: {
 				files: [<% if (includeLESS) { %>
 					app + '/assets/less/*.less',
-					app + '/assets/less/site/*.less',<% } if (includeSASS) { %>
+					app + '/assets/less/site/*.less'<% } if (includeSASS) { %>
 					app + '/assets/sass/*.scss',
 					app + '/assets/sass/site/*.scss'<% } %>
 				],
@@ -39,7 +39,7 @@ module.exports = function(grunt) {
 					app + 'assets/img/*',
 					app + 'assets/js/*.js',
 					app + '{,*/}*.php'
-				],
+				]
 			},
 			options: {
 				watchTask: true,
@@ -243,7 +243,7 @@ module.exports = function(grunt) {
 		},
 		concurrent: {
 			dev: ['clean:dist', 'preprocess:dev'],
-			build1: ['imagemin:dist', 'copy:dist', <% if (includeLESS) { %> 'less:dist' <% } %>, if (includeSASS) { %>'sass:dist'<% } %>],
+			build1: ['imagemin:dist', 'copy:dist' <% if (includeLESS) { %>, 'less:dist' <% } if (includeSASS) { %>, 'sass:dist'<% } %>],
 			build2: ['preprocess:dist', 'svgmin:dist']
 		}
 	});
