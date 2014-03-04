@@ -375,6 +375,8 @@ Generator.prototype.createThemeFiles = function createThemeFiles() {
     this.copy('global/app.js', 'app/wp-content/themes/'+this.themeName+'/assets/js/app.js');
   }
 
+  this.template('global/base-template.html', 'app/wp-content/themes/'+this.themeName+'/base-template.html')
+
   //Make folder for distribution
   this.mkdir('dist');
 }
