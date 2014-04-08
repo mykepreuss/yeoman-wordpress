@@ -1,15 +1,11 @@
 {
-	"name": "<%= themeName %>",
-	"version": "0.0.0",
-	"dependencies": {
-	  "jquery": "~1.10.*"
-	, "font-awesome": "~4.0.3"<% if (includeRequireJS) { %>
-	, "requirejs": "~2.1.9"<% } if (includeModernizr) { %>
-	, "modernizr": "~2.7.1"<% } if (includeUnderscore) { %>
-	, "underscore": "~1.5.2"<% } if (includeBootstrap && includeLESS) { %>
-	, "bootstrap": "~3.0.3"<% } if (includeBootstrap && includeSASS) { %>
-	, "sass-bootstrap": "~3.0.2"<% } if (includeFoundation && includeSASS) { %>
-	, "jquery": "~2.*"
-	, "foundation": "~5.0.2"<% } %>
-	}
+  "name": "<%= themeName %>",
+  "version": "0.0.0",
+  "dependencies": {
+    "jquery": "1.11.*"<% if (includeRequireJS) { %>
+    , "requirejs": "~2.1.9"<% } if (includeModernizr) { %>
+    , "modernizr": "~2.7.1"<% } if (includeUnderscore) { %>
+    , "underscore": "~1.5.2"<% } %>
+    , "bootstrap": "~3.0.3"
+  }
 }

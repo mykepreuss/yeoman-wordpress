@@ -37,8 +37,6 @@ Generator.prototype.getConfig = function getConfig() {
       self.configExists = true
     }
 
-    self.defaultAuthorName = data.authorName
-    self.defaultAuthorURI = data.authorURI
     self.defaultTheme = data.themeUrl
     self.latestVersion = data.latestVersion
 
@@ -115,58 +113,25 @@ Generator.prototype.askFor = function askFor() {
           filter: function (input) {
             return input.replace(/\ /g, '').toLowerCase()
           },
-          validate: requiredValidate          
+          validate: requiredValidate
       },
       {
           name: 'wordpressVersion',
           message: 'Which version of Wordpress do you want?',
           default: self.latestVersion
       },
-      {
-          name: 'authorName',
-          message: 'Author name',
-          default: self.defaultAuthorName
-      },
-      {
-          name: 'authorURI',
-          message: 'Author URI',
-          default: self.defaultAuthorURI
-      }, 
-    { 
-      type: 'list',
-      name: 'preprocessor',
-      message: 'Which CSS Preprocessor would you like?',
-      choices: [
-        {
-          name: 'LESS',
-          value: 'includeLESS'
-        },
-        {
-          name: 'SASS',
-          value: 'includeSASS'
-        }
-      ]
-    }, 
-    { 
+    {
       type: 'list',
       name: 'framework',
-      message: 'Which front-end framework would you like? (If you chose LESS don\'t choose Foundation)',
+      message: 'Which front-end framework would you like?',
       choices: [
         {
           name: 'Bootstrap',
           value: 'includeBootstrap'
-        },
-        {
-          name: 'Foundation',
-          value: 'includeFoundation'
-        },
-        {
-          name: 'None',
-          value: 'includeNone'
         }
       ]
     },
-    { 
+    {
       type: 'checkbox',
       name: 'features',
       message: 'jQuery is included by default so what more would you like?',
@@ -175,20 +140,20 @@ Generator.prototype.askFor = function askFor() {
           name: 'RequireJS',
           value: 'includeRequireJS',
           checked: true
-        }, 
+        },
         {
           name: 'Modernizr',
           value: 'includeModernizr',
           checked: true
-        }, 
+        },
         {
           name: 'Underscore',
           value: 'includeUnderscore',
           checked: true
         }
       ]
-    }, 
-    { 
+    },
+    {
       type: 'list',
       name: 'versionControl',
       message: 'Which version control service are you using?',
@@ -206,7 +171,7 @@ Generator.prototype.askFor = function askFor() {
     {
       name: 'accountName',
       message: 'What is the name of the account?',
-      default: 'signals',
+      default: 'assemblydigital',
       validate: requiredValidate
     },
     {
@@ -223,8 +188,7 @@ Generator.prototype.askFor = function askFor() {
     self.themeBoilerplate = props.themeBoilerplate
     self.wordpressVersion = props.wordpressVersion
     self.includeRequireJS = props.includeRequireJS
-    self.authorName = props.authorName
-    self.authorURI = props.authorURI
+
 
     // check if the user only gave the repo url or the entire url with /archive/{branch}.tar.gz
     var tarballLink = (/[.]*archive\/[.]*.*.tar.gz/).test(self.themeBoilerplate)
@@ -241,27 +205,16 @@ Generator.prototype.askFor = function askFor() {
 
     //Preprocessor Questions
     var framework = props.framework;
-    function whichframework(frameworkOptions) { 
-        return framework.indexOf(frameworkOptions) !== -1; 
+    function whichframework(frameworkOptions) {
+        return framework.indexOf(frameworkOptions) !== -1;
     }
 
     self.includeBootstrap = whichframework('Bootstrap');
-    self.includeFoundation = whichframework('Foundation');
-    self.includeNone = whichframework('None');
-
-    //Framework Questions
-    var preprocessor = props.preprocessor;
-    function whichPreprocessor(preprocessorOptions) { 
-        return preprocessor.indexOf(preprocessorOptions) !== -1; 
-    }
-
-    self.includeLESS = whichPreprocessor('LESS');
-    self.includeSASS = whichPreprocessor('SASS');
 
     //Feature Questions
     var features = props.features;
-    function hasFeature(feat) { 
-        return features.indexOf(feat) !== -1; 
+    function hasFeature(feat) {
+        return features.indexOf(feat) !== -1;
     }
 
     self.includeRequireJS = hasFeature('includeRequireJS');
@@ -270,8 +223,8 @@ Generator.prototype.askFor = function askFor() {
 
     //Feature Questions
     var versionControl = props.versionControl;
-    function hasVersionControl(versionOption) { 
-      return versionControl.indexOf(versionOption) !== -1; 
+    function hasVersionControl(versionOption) {
+      return versionControl.indexOf(versionOption) !== -1;
     }
 
     self.includeBitBucket = hasVersionControl('includeBitBucket');
@@ -279,13 +232,11 @@ Generator.prototype.askFor = function askFor() {
 
     self.accountName = props.accountName;
     self.repoName = props.repoName;
-    
+
     // create the config file it does not exist
     if (!self.configExists) {
       var values = {
-        authorName: self.authorName
-      , authorURI:  self.authorURI
-      , themeUrl:   self.themeOriginalURL
+        themeUrl:   self.themeOriginalURL
       }
       config.createConfig(values, cb)
     } else {
@@ -346,34 +297,20 @@ Generator.prototype.addACF = function addACF() {
 
 // generate the files to use Yeoman and the git related files
 Generator.prototype.createThemeFiles = function createThemeFiles() {
-  if (this.includeLESS) {   
     //Make the LESS Folders
     this.mkdir('app/wp-content/themes/'+this.themeName+'/assets/less');
     this.mkdir('app/wp-content/themes/'+this.themeName+'/assets/less/site');
 
     //Copy the files over
-    this.copy('starter-less/_styles.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/styles.less');  
+    this.copy('starter-less/_styles.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/styles.less');
     this.copy('starter-less/variables.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/site/variables.less');
     this.copy('starter-less/mixins.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/site/mixins.less');
     this.copy('starter-less/global.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/site/global.less');
-  }
-
-  if (this.includeSASS) {   
-    //Make the SASS folders
-    this.mkdir('app/wp-content/themes/'+this.themeName+'/assets/sass');
-    this.mkdir('app/wp-content/themes/'+this.themeName+'/assets/sass/site');
-
-    //Copy the files over
-    this.copy('starter-sass/_styles.scss', 'app/wp-content/themes/'+this.themeName+'/assets/sass/styles.scss');  
-    this.copy('starter-sass/variables.scss', 'app/wp-content/themes/'+this.themeName+'/assets/sass/site/variables.scss');
-    this.copy('starter-sass/mixins.scss', 'app/wp-content/themes/'+this.themeName+'/assets/sass/site/mixins.scss');
-    this.copy('starter-sass/global.scss', 'app/wp-content/themes/'+this.themeName+'/assets/sass/site/global.scss');      
-  }
 
   if (this.includeRequireJS) {
     this.copy('global/_main.js', 'app/wp-content/themes/'+this.themeName+'/assets/js/main.js');
     this.copy('global/app.js', 'app/wp-content/themes/'+this.themeName+'/assets/js/app.js');
-  }  
+  }
 
   this.mkdir('dist');
 }
@@ -396,7 +333,7 @@ Generator.prototype.createYeomanFiles = function createYeomanFiles() {
 // Git setup
 Generator.prototype.initGit = function initGit() {
   var cb = this.async();
-  
+
   if (this.includeBitBucket) {
     var accountName = this.accountName;
     var repoName = this.repoName;
@@ -412,23 +349,23 @@ Generator.prototype.initGit = function initGit() {
   console.log('Initializing Git');
 
   git.init(function(err) {
-    
+
     if (err) console.log(err);
     console.log('Git init complete');
 
     git.add('--all', function(err) {
 
       if (err) console.log(err);
-    
+
     }).addRemote('origin', repoURL)
     .commit('Initial Commit', function(err, d) {
 
-      if (err) console.log(err);  
+      if (err) console.log(err);
       console.log('Git add and commit complete: ' + JSON.stringify(d, null, '  '));
-    
+
     })
     .push('origin', 'master');
-    
+
     cb();
   });
 };

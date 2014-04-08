@@ -1,19 +1,24 @@
 'use strict';
 
 module.exports = function(grunt) {
+	var app = 'app/wp-content/themes/<%= themeName %>/';
+	var dist = 'dist/wp-content/themes/<%= themeName %>/';
 
+	// Load grunt tasks automatically
+	require('load-grunt-tasks')(grunt);
+
+	require('time-grunt')(grunt);
+
+	// Project configuration.
 	grunt.initConfig({
 		watch: {
 			css: {
-				files: [<% if (includeLESS) { %>
-					'app/wp-content/themes/<%= themeName %>/assets/less/*.less',
-					'app/wp-content/themes/<%= themeName %>/assets/less/site/*.less'<% } if (includeSASS) { %>
-					'app/wp-content/themes/<%= themeName %>/assets/sass/*.scss',
-					'app/wp-content/themes/<%= themeName %>/assets/sass/site/*.scss'<% } %>
+				files: [
+					app + 'assets/less/*.less',
+					app + 'assets/less/site/*.less'
 				],
-				tasks: [<% if (includeLESS) { %>
-					'less:development'<% } if (includeSASS) { %>
-					'sass:development'<% } %>
+				tasks: [
+					'less:development'
 				],
 				options: {
 					livereload: true
@@ -21,63 +26,56 @@ module.exports = function(grunt) {
 			},
 			js: {
 				files: [
-					'app/wp-content/themes/<%= themeName %>/assets/js/*.js',
+					app + 'assets/js/*.js',
 					'Gruntfile.js'
 				],
 				tasks: ['jshint'],
 				options: {
-					livereload: true,
+					livereload: true
 				}
 			}
 		},
 		browser_sync: {
 			files: {
 				src : [
-					'app/wp-content/themes/<%= themeName %>/*.css',
-					'app/wp-content/themes/<%= themeName %>/assets/img/*',
-					'app/wp-content/themes/<%= themeName %>/assets/js/*.js',
-					'app/wp-content/themes/<%= themeName %>/{,*/}*.php'
+					app + '*.css',
+					app + 'assets/img/*',
+					app + 'assets/js/*.js',
+					app + '**/*.php'
 				],
 			},
 			options: {
-				watchTask: true
+				watchTask: true,
+				host: '<%= themeName %>',
+				port: 8888
 			}
 		},
-		<% if (includeLESS) { %>
 		less: {
 			development: {
 				options: {
-					paths: 'app/wp-content/themes/<%= themeName %>/'
+					sourceMap: true,
+					sourceMapFilename: app + 'style.css.map',
+					sourceMapURL: '/wp-content/themes/<%= themeName %>/style.css.map',
+					sourceMapBasepath: 'public',
+					sourceMapRootpath: app,
+					paths: app + 'assets/css'
 				},
 				files: {
 					'app/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/less/styles.less'
 				}
 			},
-			production: {
+			dist: {
 				options: {
-					paths: 'app/wp-content/themes/<%= themeName %>/',
-					cleancss: true
+					paths: app,
+					sourceMap: false,
+					cleancss: true,
+					compress: true
 				},
 				files: {
 					'dist/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/less/styles.less'
 				}
 			}
-		},<% } if (includeSASS) { %>
-		sass: {
-			development: {
-				files: {
-					'app/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/sass/styles.scss'
-				}
-			},
-			production: {
-				options: {
-					style: 'compressed'
-				},
-				files: {
-					'dist/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/sass/styles.scss'
-				}
-			}
-		},<% } %>
+		},
 		clean: {
 			dist: {
 				files: [{
@@ -97,40 +95,21 @@ module.exports = function(grunt) {
 				'Gruntfile.js',
 				'app/wp-content/themes/<%= themeName %>/assets/js/{,*/}*.js'
 			]
-		},<% if (includeSASS) { %>
-		// Configuration needs to be completed
-		compass: {
-			options: {
-				sassDir: 'app/wp-content/themes/<%= themeName %>',
-				cssDir: 'app/wp-content/themes/<%= themeName %>',
-				generatedImagesDir: 'app/wp-content/themes/<%= themeName %>/img',
-				imagesDir: 'app/wp-content/themes/<%= themeName %>/img',
-				javascriptsDir: 'app/wp-content/themes/<%= themeName %>/js',
-				fontsDir: 'app/wp-content/themes/<%= themeName %>/css/fonts',
-				httpImagesPath: 'app/wp-content/themes/<%= themeName %>/img',
-				httpGeneratedImagesPath: 'app/wp-content/themes/<%= themeName %>/img',
-				httpFontsPath: 'app/wp-content/themes/<%= themeName %>/fonts',
-				relativeAssets: false
-			},
-			dist: {
-				options: {
-					generatedImagesDir: 'dist/wp-content/themes/<%= themeName %>/img/generated'
-				}
-			}
-		},<% } if (includeRequireJS) { %>
+		},<% if (includeRequireJS) { %>
 		requirejs: {
-			dist: {
-				// Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
+			compile: {
 				options: {
-					// `name` and `out` is set by grunt-usemin
-					baseUrl: 'app/wp-content/themes/<%= themeName %>/assets/js',
-					mainConfigFile: 'app/wp-content/themes/<%= themeName %>/assets/js/main.js',
+					baseUrl: app + 'assets/js',
+					mainConfigFile: app + 'assets/js/main.js',
+					optimize : 'uglify2',
+					inlineText : true,
+					findNestedDependencies : true,
 					paths: {
 						jquery: 'empty:',
 						underscore: 'empty:',
 						app: 'app'
 					},
-					dir: 'dist/wp-content/themes/<%= themeName %>/assets/js',
+					dir: dist + 'assets/js',
 					shim: {
 						underscore: {
 							deps: ['jquery'],
@@ -147,21 +126,65 @@ module.exports = function(grunt) {
 			dist: {
 				files: [{
 					expand: true,
-					cwd: 'app/wp-content/themes/<%= themeName %>/assets/img',
-					src: '{,*/}*.{png,jpg,jpeg}',
-					dest: 'dist/wp-content/themes/<%= themeName %>/assets/img'
-				}]
+					cwd: app + 'assets/images',
+					src: '**/*.{png,jpg,jpeg}',
+					dest: dist + 'assets/images'
+				}],
+				options: {
+					cache: false
+				}
+			},
+			uploads: {
+				files: [{
+					expand: true,
+					cwd: 'app/media',
+					src: '**/*.{png,jpg,jpeg}',
+					dest: 'dist/media'
+				}],
+				options: {
+					cache: false
+				}
 			}
 		},
 		svgmin: {
 			dist: {
 				files: [{
 					expand: true,
-					cwd: 'wp-content/themes/<%= themeName %>/assets/img',
-					src: '{,*/}*.svg',
-					dest: 'dist/wp-content/themes/<%= themeName %>/assets/img'
+					cwd: app + 'assets/images',
+					src: '**/*.svg',
+					dest: dist + 'assets/images'
+				}]
+			},
+			uploads: {
+				files: [{
+					expand: true,
+					cwd: 'app/media',
+					src: '**/*.svg',
+					dest: 'dist/media'
 				}]
 			}
+		},
+		preprocess: {
+			dev: {
+				options: {
+					context: {
+						NODE_ENV: 'DEVELOPMENT'
+					},
+				},
+				files: {
+					'app/wp-content/themes/assembly-theme/base.php': 'app/wp-content/themes/assembly-theme/base-template.html'
+				},
+			},
+			dist: {
+				options: {
+					context: {
+						NODE_ENV: 'PRODUCTION'
+					},
+				},
+				files: {
+					'dist/wp-content/themes/assembly-theme/base.php': 'app/wp-content/themes/assembly-theme/base-template.html'
+				},
+			},
 		},
 		// Put files not handled in other tasks here
 		copy: {
@@ -172,58 +195,84 @@ module.exports = function(grunt) {
 					cwd: 'app',
 					dest: 'dist',
 					src: [
-						'*.{ico,png,txt,php}',
+						'*.{ico,png,txt,php,html,md}',
 						'.htaccess',
-						'wp-admin/*',
-						'wp-includes/*',
-						'wp-content/plugins/*',
+						'.gitignore',
+						'wp-admin/*.php',
+						'wp-admin/**/*',
+						'wp-includes/**/*',
+						'wp-includes/*.php',
+						'wp-content/*.php',
+						'wp-content/plugins/*.php',
+						'wp-content/plugins/**/*',
+						'wp-content/themes/*.php',
 						'wp-content/themes/<%= themeName %>/*.{php,md,png,css}',
-						'wp-content/themes/<%= themeName %>/templates/*',
-						'wp-content/themes/<%= themeName %>/lib/*',
-						'wp-content/themes/<%= themeName %>/lang/*',
-						'wp-content/themes/<%= themeName %>/assets/fonts/{,*/}*.*'
+						'wp-content/themes/<%= themeName %>/templates/**/*',
+						'wp-content/themes/<%= themeName %>/lib/**/*',
+						'wp-content/themes/<%= themeName %>/lang/**/*',
+						'wp-content/themes/<%= themeName %>/assets/fonts/**/*',
+						'wp-content/themes/<%= themeName %>/assets/js/**/*',
+						'wp-content/themes/<%= themeName %>/assets/css/**/*',
+						'wp-content/themes/<%= themeName %>/assets/bower_components/modernizr/modernizr.js',
+						'wp-content/themes/<%= themeName %>/assets/bower_components/requirejs/require.js'
 					]
 				}]
 			}
 		},
+		hashres: {
+			options: {
+				encoding: 'utf8',
+				fileNameFormat: <%="'"%><%= '${name}.${ext}?${hash}' %><%="'"%>,
+				renameFiles: false
+			},
+			css: {
+				src: [
+					dist + 'style.css'
+				],
+				dest: dist + 'templates/head.php',
+			}
+		},
+		buildcontrol: {
+			options: {
+				dir: 'dist',
+				commit: true,
+				push: true,
+				message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%'
+			},
+			prod: {
+				options: {
+					<% if (includeBitBucket) { %>
+					remote: 'https://bitbucket.org/<%= accountName %>/<%= repoName %>',
+					<% } if (includeGitHub) { %>
+					remote: 'https://github.com/<%= accountName %>/<%= repoName %>',
+					<% } %>
+					branch: 'master'
+				}
+			}
+		},
 		concurrent: {
-			dist: [
-				<% if (includeSASS) { %>
-				'compass',
-				<% } %>
-				'imagemin',
-				'svgmin'
-			]
+			dev: ['clean:dist', 'preprocess:dev'],
+			build1: ['imagemin:dist', 'copy:dist', 'less:dist'],
+			build2: ['preprocess:dist', 'svgmin:dist']
 		}
 	});
 
-	// Load the Grunt plugins.
-	<% if (includeLESS) { %>
-	grunt.loadNpmTasks('grunt-contrib-less');
-	<% } if (includeSASS) { %>
-	grunt.loadNpmTasks('grunt-contrib-sass');
-	<% } %>	
-	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-contrib-jshint');
-	grunt.loadNpmTasks('grunt-browser-sync');
-	grunt.loadNpmTasks('grunt-contrib-requirejs');
-	grunt.loadNpmTasks('grunt-contrib-copy');
-	grunt.loadNpmTasks('grunt-contrib-clean');
-	grunt.loadNpmTasks('grunt-contrib-imagemin');
-	grunt.loadNpmTasks('grunt-svgmin');
-	grunt.loadNpmTasks('grunt-concurrent');
+	grunt.registerTask('deploy', [
+		'buildcontrol'
+	]);
 
 	grunt.registerTask('build', [
 		'clean:dist',
-		'concurrent:dist',
-		'requirejs',
-		'copy:dist'
+		'concurrent:build1',
+		'concurrent:build2',
+		'hashres'
 	]);
 
-	grunt.registerTask('default', [
+	grunt.registerTask('dev', [
+		'concurrent:dev',
 		'browser_sync',
-		'watch',
-		'jshint',
-		'build'
+		'watch'
 	]);
+
+	grunt.registerTask('default', 'dev');
 };
