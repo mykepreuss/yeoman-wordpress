@@ -61,7 +61,7 @@ module.exports = function(grunt) {
 					paths: app + 'assets/css'
 				},
 				files: {
-					'app/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/less/styles.less'
+					'app/wp-content/themes/<%= themeName %>/style.css': 'app/wp-content/themes/<%= themeName %>/assets/less/style.less'
 				}
 			},
 			dist: {
@@ -72,7 +72,7 @@ module.exports = function(grunt) {
 					compress: true
 				},
 				files: {
-					'dist/wp-content/themes/<%= themeName %>/styles.css': 'app/wp-content/themes/<%= themeName %>/assets/less/styles.less'
+					'dist/wp-content/themes/<%= themeName %>/style.css': 'app/wp-content/themes/<%= themeName %>/assets/less/style.less'
 				}
 			}
 		},
