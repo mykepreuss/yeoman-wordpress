@@ -4,3 +4,4 @@
 node_modules
 assets/bower_components
 wp-config.php
+browser_sync.php

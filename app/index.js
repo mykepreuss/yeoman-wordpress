@@ -297,12 +297,13 @@ Generator.prototype.addACF = function addACF() {
 
 // generate the files to use Yeoman and the git related files
 Generator.prototype.createThemeFiles = function createThemeFiles() {
+
     //Make the LESS Folders
     this.mkdir('app/wp-content/themes/'+this.themeName+'/assets/less');
     this.mkdir('app/wp-content/themes/'+this.themeName+'/assets/less/site');
 
     //Copy the files over
-    this.copy('starter-less/_styles.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/styles.less');
+    this.copy('starter-less/_style.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/style.less');
     this.copy('starter-less/variables.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/site/variables.less');
     this.copy('starter-less/mixins.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/site/mixins.less');
     this.copy('starter-less/global.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/site/global.less');
@@ -312,6 +313,9 @@ Generator.prototype.createThemeFiles = function createThemeFiles() {
     this.copy('global/app.js', 'app/wp-content/themes/'+this.themeName+'/assets/js/app.js');
   }
 
+  this.template('global/base-template.html', 'app/wp-content/themes/'+this.themeName+'/base-template.html')
+
+  //Make folder for distribution
   this.mkdir('dist');
 }
 
@@ -321,6 +325,7 @@ Generator.prototype.createYeomanFiles = function createYeomanFiles() {
   this.copy('global/_package.json', 'package.json')
   this.template('global/bowerrc', '.bowerrc')
   this.copy('global/_bower.json', 'bower.json')
+  this.copy('global/README.md', 'README.md')
 
   this.template('Gruntfile.js', 'Gruntfile.js')
 
