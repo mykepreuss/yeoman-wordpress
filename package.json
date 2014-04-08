@@ -1,6 +1,6 @@
 {
   "name": "generator-assembly-wp",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Yeoman generator for Wordpress using our fork of the Roots theme. This generator is forked from yeoman-wordpress",
   "homepage": "https://github.com/mykepreuss/yeoman-wordpress",
   "author":{
