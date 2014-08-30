@@ -101,9 +101,21 @@ Generator.prototype.askFor = function askFor() {
   };
 
   var prompts = [{
+          name: 'projectName',
+          message: 'Project or Client Name',
+          default: 'Assembly',
+          filter: function (input) {
+            return input.replace(/\ /g, '').toUpperCase()
+          },
+          validate: requiredValidate
+      },
+      {
           name: 'themeName',
-          message: 'Project Name',
-          default: 'assembly',
+          message: 'Enter the name of the WordPress theme',
+          default: 'assembly-theme',
+          filter: function (input) {
+            return input.replace(/\ /g, '').toLowerCase()
+          },
           validate: requiredValidate
       },
       {
@@ -184,6 +196,8 @@ Generator.prototype.askFor = function askFor() {
     // set the property to parse the gruntfile
     self.themeNameOriginal = props.themeName
     self.themeName = props.themeName
+    self.projectNameOriginal = props.projectName
+    self.projectName = props.projectName
     self.themeOriginalURL = props.themeBoilerplate
     self.themeBoilerplate = props.themeBoilerplate
     self.wordpressVersion = props.wordpressVersion
@@ -303,10 +317,14 @@ Generator.prototype.createThemeFiles = function createThemeFiles() {
     this.mkdir('app/wp-content/themes/'+this.themeName+'/assets/less/site');
 
     //Copy the files over
-    this.copy('starter-less/_style.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/style.less');
+    this.template('starter-less/_style.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/style.less');
     this.copy('starter-less/variables.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/site/variables.less');
     this.copy('starter-less/mixins.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/site/mixins.less');
     this.copy('starter-less/global.less', 'app/wp-content/themes/'+this.themeName+'/assets/less/site/global.less');
+
+    this.template('global/_style.css', 'app/wp-content/themes/'+this.themeName+'/style.css');
+
+    this.template('global/head-template.html', 'app/wp-content/themes/'+this.themeName+'/templates/head-template.html')
 
   if (this.includeRequireJS) {
     this.copy('global/_main.js', 'app/wp-content/themes/'+this.themeName+'/assets/js/main.js');
@@ -314,7 +332,7 @@ Generator.prototype.createThemeFiles = function createThemeFiles() {
   }
 
   this.template('global/base-template.html', 'app/wp-content/themes/'+this.themeName+'/base-template.html');
-    this.template('global/head-template.html', 'app/wp-content/themes/'+this.themeName+'/templates/head-template.html')
+  this.template('global/head-template.html', 'app/wp-content/themes/'+this.themeName+'/templates/head-template.html')
 
   //Make folder for distribution
   this.mkdir('dist');

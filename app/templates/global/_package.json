@@ -1,6 +1,6 @@
 {
-  "name": "<%= themeName %>",
-  "description": "<%= themeName %> Project",
+  "name": "<%= projectName %>",
+  "description": "<%= projectName %>",
   "repository": {
     "type": "git",
     "url": "https://bitbucket.org/<%= _.slugify(accountName) %>/<%= _.slugify(repoName) %>"
