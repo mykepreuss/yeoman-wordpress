@@ -19,16 +19,16 @@
 
   <div class="wrap container" role="document">
     <div class="content row">
-      <main class="main <?php echo roots_main_class(); ?>" role="main">
+      <main class="main" role="main">
         <?php include roots_template_path(); ?>
       </main><!-- /.main -->
     </div><!-- /.content -->
   </div><!-- /.wrap -->
 
   <!-- @if NODE_ENV == 'DEVELOPMENT' -->
-<script src='//<%= themeName %>:3000/socket.io/socket.io.js'></script>
-<script>var ___socket___ = io.connect('http://<%= themeName %>:3000');</script>
-<script src='//<%= themeName %>:3001/client/browser-sync-client.0.6.2.js'></script>
+<script type='text/javascript'>//<![CDATA[
+document.write("<script async src='//HOST:8890/browser-sync-client.1.3.6.js'><\/script>".replace(/HOST/g, location.hostname));
+//]]></script>
 <!-- @endif -->
 
   <?php get_template_part('templates/footer'); ?>

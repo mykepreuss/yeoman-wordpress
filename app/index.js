@@ -102,8 +102,8 @@ Generator.prototype.askFor = function askFor() {
 
   var prompts = [{
           name: 'themeName',
-          message: 'Name of the theme you want to use',
-          default: 'assembly-theme',
+          message: 'Project Name',
+          default: 'assembly',
           validate: requiredValidate
       },
       {
@@ -313,7 +313,8 @@ Generator.prototype.createThemeFiles = function createThemeFiles() {
     this.copy('global/app.js', 'app/wp-content/themes/'+this.themeName+'/assets/js/app.js');
   }
 
-  this.template('global/base-template.html', 'app/wp-content/themes/'+this.themeName+'/base-template.html')
+  this.template('global/base-template.html', 'app/wp-content/themes/'+this.themeName+'/base-template.html');
+    this.template('global/head-template.html', 'app/wp-content/themes/'+this.themeName+'/templates/head-template.html')
 
   //Make folder for distribution
   this.mkdir('dist');

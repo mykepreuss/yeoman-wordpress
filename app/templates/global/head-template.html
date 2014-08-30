@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+	<meta charset="utf-8">
+	<title><?php wp_title('|', true, 'right'); ?></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="<?php bloginfo('description') ?>">
+
+	<!-- @if NODE_ENV == 'DEVELOPMENT' -->
+	<link rel="stylesheet" media="all" href="<?php bloginfo('stylesheet_url'); ?>" />
+
+	<!--[if lt IE 9]>
+	<script src="<?php bloginfo('template_directory');?>/assets/bower_components/respond/dest/respond.min.js"></script>
+	<![endif]-->
+
+	<script type='text/javascript' src='<?php bloginfo('url'); ?>/wp-content/themes/<%= themeName %>/assets/bower_components/modernizr/modernizr.js'></script>
+
+	<link rel="shortcut icon" href="<?php bloginfo('url'); ?>/<%= themeName %>.ico" />
+	<link rel="apple-touch-icon-precomposed" sizes="76x76" href="<?php bloginfo('url'); ?>/<%= themeName %>-touch-icon-ipad.png" />
+	<link rel="apple-touch-icon-precomposed" href="<?php bloginfo('url'); ?>/<%= themeName %>-touch-icon-iphone.png" />
+	<!-- @endif -->
+
+	<!-- @if NODE_ENV == 'PRODUCTION' -->
+	<link rel="stylesheet" media="all" href="<?php bloginfo('url'); ?>/wp-content/themes/<%= themeName %>/style.css" />
+
+	<!--[if lt IE 9]>
+	<script src="<?php bloginfo('url'); ?>/wp-content/themes/<%= themeName %>/assets/bower_components/respond/dest/respond.min.js"></script>
+	<![endif]-->
+
+	<script type='text/javascript' src='<?php bloginfo('url'); ?>/wp-content/themes/<%= themeName %>/assets/bower_components/modernizr/modernizr.js'></script>
+
+	<link rel="shortcut icon" href="<?php bloginfo('url'); ?>/<%= themeName %>.ico" />
+	<link rel="apple-touch-icon-precomposed" sizes="76x76" href="<?php bloginfo('url'); ?>/<%= themeName %>-touch-icon-ipad.png" />
+	<link rel="apple-touch-icon-precomposed" href="<?php bloginfo('url'); ?>/<%= themeName %>-touch-icon-iphone.png" />
+	<!-- @endif -->
+
+	<?php wp_head(); ?>
+</head>

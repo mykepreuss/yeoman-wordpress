@@ -35,7 +35,7 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-		browser_sync: {
+		browserSync: {
 			files: {
 				src : [
 					app + '*.css',
@@ -172,7 +172,8 @@ module.exports = function(grunt) {
 					},
 				},
 				files: {
-					'app/wp-content/themes/assembly-theme/base.php': 'app/wp-content/themes/assembly-theme/base-template.html'
+					'app/wp-content/themes/<%= themeName %>/base.php': 'app/wp-content/themes/<%= themeName %>/base-template.html',
+					'app/wp-content/themes/<%= themeName %>/templates/head.php': 'app/wp-content/themes/<%= themeName %>/templates/head-template.html'
 				},
 			},
 			dist: {
@@ -182,7 +183,8 @@ module.exports = function(grunt) {
 					},
 				},
 				files: {
-					'dist/wp-content/themes/assembly-theme/base.php': 'app/wp-content/themes/assembly-theme/base-template.html'
+					'dist/wp-content/themes/<%= themeName %>/base.php': 'app/wp-content/themes/<%= themeName %>/base-template.html',
+					'dist/wp-content/themes/<%= themeName %>/templates/head.php': 'app/wp-content/themes/<%= themeName %>/templates/head-template.html'
 				},
 			},
 		},
@@ -270,7 +272,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('dev', [
 		'concurrent:dev',
-		'browser_sync',
+		'browserSync',
 		'watch'
 	]);
 
