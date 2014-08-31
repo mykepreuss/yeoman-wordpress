@@ -3,6 +3,7 @@
 module.exports = function(grunt) {
 	var app = 'app/wp-content/themes/<%= themeName %>/';
 	var dist = 'dist/wp-content/themes/<%= themeName %>/';
+	var projectName = '<%= projectName %>'.replace(/\ /g, '').toLowerCase();
 
 	// Load grunt tasks automatically
 	require('load-grunt-tasks')(grunt);
@@ -18,7 +19,8 @@ module.exports = function(grunt) {
 					app + 'assets/less/site/*.less'
 				],
 				tasks: [
-					'less:development'
+					'less:development',
+					'autoprefixer'
 				],
 				options: {
 					livereload: true
@@ -46,7 +48,7 @@ module.exports = function(grunt) {
 			},
 			options: {
 				watchTask: true,
-				host: '<%= themeName %>',
+				host: projectName,
 				port: 8888
 			}
 		},
@@ -72,8 +74,17 @@ module.exports = function(grunt) {
 					compress: true
 				},
 				files: {
-					'dist/wp-content/themes/<%= themeName %>/style.css': 'app/wp-content/themes/<%= themeName %>/assets/less/style.less'
+					'app/wp-content/themes/<%= themeName %>/style.css': 'app/wp-content/themes/<%= themeName %>/assets/less/style.less'
 				}
+			}
+		},
+		autoprefixer: {
+			single_file: {
+				options: {
+					browsers: ['> 1%', 'last 2 versions', 'ie 9']
+				},
+				src: app + 'style.css',
+				dest: app + 'style.css'
 			}
 		},
 		clean: {
@@ -95,7 +106,65 @@ module.exports = function(grunt) {
 				'Gruntfile.js',
 				'app/wp-content/themes/<%= themeName %>/assets/js/{,*/}*.js'
 			]
-		},<% if (includeRequireJS) { %>
+		},
+		exec: {
+			get_grunt_sitemap: {
+				command: 'curl --silent --output sitemap.json http://'+projectName+':8888/?show_sitemap'
+			}
+		},
+		uncss: {
+			development: {
+				options: {
+					ignore: ['.active', '.open'],
+					stylesheets: ['style.css'],
+					media: ['(min-width: 768px)', '(min-width: 992px)', '(min-width: 1200px)'],
+					urls: [], //Overwritten in load_sitemap_and_uncss task
+				},
+				files: {
+					'app/wp-content/themes/<%= themeName %>/style.clean.css': ['app/wp-content/themes/<%= themeName %>/**/*.php']
+				}
+			},
+			dist: {
+				options: {
+					ignore: ['.active', '.open'],
+					stylesheets: ['style.css'],
+					media: ['(min-width: 768px)', '(min-width: 992px)', '(min-width: 1200px)'],
+					urls: [], //Overwritten in load_sitemap_and_uncss task
+				},
+				files: {
+					'dist/wp-content/themes/<%= themeName %>/style.clean.css': ['app/wp-content/themes/<%= themeName %>/**/*.php']
+				}
+			}
+		},
+		modernizr: {
+			dist: {
+				'devFile': 'app/wp-content/themes/<%= themeName %>/assets/bower_components/modernizr/modernizr.js',
+				'outputFile': 'dist/wp-content/themes/<%= themeName %>/assets/bower_components/modernizr/modernizr-custom.js',
+				'extra': {
+					'shiv': false,
+					'printshiv': false,
+					'load': true,
+					'mq': false,
+					'cssclasses': true
+				},
+				'extensibility': {
+					'addtest': false,
+					'prefixed': false,
+					'teststyles': false,
+					'testprops': false,
+					'testallprops': false,
+					'hasevents': false,
+					'prefixes': false,
+					'domprefixes': false
+				},
+				'parseFiles': true,
+				'files': {
+					'src': [
+						'app/wp-content/themes/<%= themeName %>/assets/js/app.js'
+					]
+				}
+			}
+		},
 		requirejs: {
 			compile: {
 				options: {
@@ -121,7 +190,7 @@ module.exports = function(grunt) {
 					}
 				}
 			}
-		},<% } %>
+		},
 		imagemin: {
 			dist: {
 				files: [{
@@ -215,7 +284,6 @@ module.exports = function(grunt) {
 						'wp-content/themes/<%= themeName %>/assets/fonts/**/*',
 						'wp-content/themes/<%= themeName %>/assets/js/**/*',
 						'wp-content/themes/<%= themeName %>/assets/css/**/*',
-						'wp-content/themes/<%= themeName %>/assets/bower_components/modernizr/modernizr.js',
 						'wp-content/themes/<%= themeName %>/assets/bower_components/requirejs/require.js'
 					]
 				}]
@@ -255,9 +323,24 @@ module.exports = function(grunt) {
 		concurrent: {
 			dev: ['clean:dist', 'preprocess:dev'],
 			build1: ['imagemin:dist', 'copy:dist', 'less:dist'],
-			build2: ['preprocess:dist', 'svgmin:dist']
+			build2: ['preprocess:dist', 'svgmin:dist', 'modernizr']
 		}
 	});
+
+	grunt.registerTask('load_sitemap_json', function() {
+		var sitemap_urls = grunt.file.readJSON('./sitemap.json');
+		grunt.config.set('uncss.dist.options.urls', sitemap_urls);
+	});
+
+	grunt.registerTask('optimize-uncss', [
+		'exec:get_grunt_sitemap',
+		'load_sitemap_json','uncss:dist'
+	]);
+
+	grunt.registerTask('test-uncss', [
+		'exec:get_grunt_sitemap',
+		'load_sitemap_json','uncss:development'
+	]);
 
 	grunt.registerTask('deploy', [
 		'buildcontrol'
@@ -267,6 +350,7 @@ module.exports = function(grunt) {
 		'clean:dist',
 		'concurrent:build1',
 		'concurrent:build2',
+		'optimize-uncss',
 		'hashres'
 	]);
 

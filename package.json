@@ -1,12 +1,12 @@
 {
   "name": "generator-assembly-wp",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "Yeoman generator for Wordpress using our fork of the Roots theme. This generator is forked from yeoman-wordpress",
   "homepage": "https://github.com/mykepreuss/yeoman-wordpress",
   "author":{
     "name": "Myke Preuss",
-    "email": "myke@waytoogood.ca",
-    "url": "http://waytoogood.ca"
+    "email": "myke@assemblydigital.com",
+    "url": "http://assemblydigital.com"
   },
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
   },
   "bugs": {
     "url" : "https://github.com/mykepreuss/yeoman-wordpress/issues",
-    "email" : "myke@waytoogood.ca"
+    "email" : "myke@assemblydigital.com"
   },
   "dependencies": {
     "yeoman-generator": "~0.14",

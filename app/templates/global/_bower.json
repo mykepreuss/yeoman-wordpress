@@ -2,10 +2,10 @@
   "name": "<%= projectName %>",
   "version": "0.1.0",
   "dependencies": {
-    "jquery": "1.11.*"<% if (includeRequireJS) { %>
-    , "requirejs": "~2.1.14"<% } if (includeModernizr) { %>
-    , "modernizr": "~2.8.3"<% } if (includeUnderscore) { %>
-    , "underscore": "~1.7.0"<% } %>
-    , "bootstrap": "~3.2.0"
+    "jquery": "1.11.*",
+    "requirejs": "~2.1.14",
+    "modernizr": "~2.8.3",
+    "underscore": "~1.7.0",
+    "bootstrap": "~3.2.0"
   }
 }
