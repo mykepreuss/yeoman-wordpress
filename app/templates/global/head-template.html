@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html <?php language_attributes(); ?>>
 <head>
-	<meta charset="utf-8">
-	<title><?php wp_title('|', true, 'right'); ?></title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="<?php bloginfo('description') ?>">
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><?php wp_title('|', true, 'right'); ?></title>
 
 	<!-- @if NODE_ENV == 'DEVELOPMENT' -->
 	<link rel="stylesheet" media="all" href="<?php bloginfo('stylesheet_url'); ?>" />
@@ -34,5 +32,5 @@
 	<link rel="apple-touch-icon-precomposed" href="<?php bloginfo('url'); ?>/<%= themeName %>-touch-icon-iphone.png" />
 	<!-- @endif -->
 
-	<?php wp_head(); ?>
+  <?php wp_head(); ?>
 </head>
